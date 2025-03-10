@@ -24,7 +24,9 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
      */
     protected function resources(): array
     {
-        return [];
+        return [
+            new TicketResource(),
+        ];
     }
 
     /**
@@ -43,13 +45,13 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
         return [
             
             MenuGroup::make('System', [
-                MenuItem::make('Usuarios', new \Sweet1s\MoonshineRBAC\Resource\UserResource(), 'heroicons.outline.users') ->canSee(static fn () => auth()->user()->roles()->where('name', 'Administrador')->exists()),
-                MenuItem::make('Roles', new \Sweet1s\MoonshineRBAC\Resource\RoleResource(), 'heroicons.outline.shield-exclamation')  ->canSee(static fn () => auth()->user()->roles()->where('name', 'Administrador')->exists()),
-                MenuItem::make('Permisos', new \Sweet1s\MoonshineRBAC\Resource\PermissionResource(), 'heroicons.outline.shield-exclamation')  ->canSee(static fn () => auth()->user()->roles()->where('name', 'Administrador')->exists()),
+                MenuItem::make('Usuarios', new \Sweet1s\MoonshineRBAC\Resource\UserResource(), 'heroicons.outline.users') ->canSee(static fn () => auth()->user()->roles()->whereIn('name', [ 'Admin', 'Super_administrador'])->exists()),
+                MenuItem::make('Roles', new \Sweet1s\MoonshineRBAC\Resource\RoleResource(), 'heroicons.outline.shield-exclamation') ->canSee(static fn () => auth()->user()->roles()->whereIn('name',  [ 'Admin', 'Super_administrador'])->exists()),
+                MenuItem::make('Permisos', new \Sweet1s\MoonshineRBAC\Resource\PermissionResource(), 'heroicons.outline.shield-exclamation') ->canSee(static fn () => auth()->user()->roles()->whereIn('name',  [ 'Admin', 'Super_administrador'] )->exists()),
             ], 'heroicons.outline.user-group'),
 
             MenuDivider::make(),
-            MenuItem::make('Ticket', new TicketResource()) ->canSee(static fn () => auth()->user()->roles()->whereIn('name', ['Usuario', 'Soporte'])->exists())
+            MenuItem::make('Ticket', new TicketResource()) ->canSee(static fn () => auth()->user()->roles()->whereIn('name', ['Usuario', 'Soporte', 'Super_administrador'])->exists())
 
 
         ];

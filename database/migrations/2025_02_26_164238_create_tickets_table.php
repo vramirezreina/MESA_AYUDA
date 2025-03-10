@@ -17,6 +17,8 @@ return new class extends Migration
             $table->text('prioridad')->nullable();
             $table->text('descripcion')->nullable();
             $table->text('archivo')->nullable();
+            $table->string('estado')->default('Abierto');
+            $table->text('comentario')->nullable();
             $table->timestamps();
         });
     }
