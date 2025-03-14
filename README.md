@@ -1,6 +1,8 @@
+
 <p align="center">
-  <img src="./public/logo.svg" alt="Logo">
+  <img src="./assets/logo.svg" alt="Logo">
 </p>
+
 
 # Mesa de Ayuda
 
