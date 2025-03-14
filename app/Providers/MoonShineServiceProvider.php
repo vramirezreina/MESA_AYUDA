@@ -51,7 +51,7 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
             ], 'heroicons.outline.user-group'),
 
             MenuDivider::make(),
-            MenuItem::make('Ticket', new TicketResource()) ->canSee(static fn () => auth()->user()->roles()->whereIn('name', ['Usuario', 'Soporte', 'Super_administrador'])->exists())
+            MenuItem::make('Ticket', new TicketResource()) ->canSee(static fn () => auth()->user()->roles()->whereIn('name', ['Usuario', 'Soporte','Admin', 'Super_administrador'])->exists())
 
 
         ];
