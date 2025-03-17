@@ -4,14 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use MoonShine\Fields\Relationships\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Ticket extends Model
 {
     use HasFactory;
     protected $fillable = [ 
-        'tipo_tikect',
+        'tipo_ticket',
         'prioridad',
         'descripcion',
         'archivo',
@@ -30,4 +30,11 @@ class Ticket extends Model
     {
         return $this->belongsTo(User::class, 'assigned_to');
     }
+
+public function statusHistories()
+{
+    return $this->hasMany(TicketStatusHistory::class, 'ticket_id');
+}
+
+
 }

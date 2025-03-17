@@ -15,11 +15,21 @@ use MoonShine\Fields\Textarea;
 use MoonShine\Fields\Image;
 use MoonShine\Fields\Text;
 use MoonShine\Fields\Relationships\BelongsTo;
+use MoonShine\Fields\Relation;
+use MoonShine\Fields\DateTime;
 use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 use MoonShine\Components\MoonShineComponent;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 use MoonShine\Pages\CustomPage;
+//use App\Models\TicketStatusHistory;
+use App\MoonShine\Resources\TicketStatusHistoryResource;
+use MoonShine\Fields\Relationships\HasMany;
+
+
+use MoonShine\Resources\Resource;
+use MoonShine\Actions\Action;
+use MoonShine\Actions\DeleteAction;
 
 /**
  * @extends ModelResource<Ticket>
@@ -107,13 +117,21 @@ class TicketResource extends ModelResource
                     ->updateOnPreview()
                     ->hideOnCreate(), // Ocultar al crear
 
-                    Textarea::make('Comentario', 'comentario')
+                Textarea::make('Comentario', 'comentario')
                     ->badge('gray')
                     ->canSee(fn () => Auth::user()->hasRole(['Soporte', 'Usuario', 'Admin', 'Super_Administrador']))
                     ->disabled(fn () => Auth::user()->hasRole('Usuario'))
                     ->hideOnCreate(), // Ocultar al crear
 
-                
+            
+
+                 
+
+HasMany::make('Historial de Estados', 'statusHistories', new TicketStatusHistoryResource()),
+
+                    
+
+
             ])
         ];
     }
@@ -139,8 +157,23 @@ class TicketResource extends ModelResource
         return Ticket::query()->where('user_id', $user->id);
     }
 
-  public function rules(Model $item): array
-  {
-      return [];
-  }
+    public function exportFields(): array
+    {
+        return [
+            ID::make()->sortable(),
+            Text::make('Tipo', 'tipo_ticket'),
+            Text::make('Prioridad', 'prioridad'),
+            Textarea::make('Descripción', 'descripcion'),
+            Text::make('Archivo', 'archivo'),
+            Text::make('Usuario', 'user.name'),
+            Text::make('Asignado a', 'assignedTo.name'),
+            Text::make('Estado', 'estado'),
+            Textarea::make('Comentario', 'comentario'),
+        ];
+    }
+
+    public function rules(Model $item): array
+    {
+        return [];
+    }
 }

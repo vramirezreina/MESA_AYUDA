@@ -54,4 +54,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function rules(): array
+{
+    return [
+        'delete' => fn() => !Auth::user()->hasRole('Super Admin'),
+    ];
+}
+
 }
